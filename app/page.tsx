@@ -21,8 +21,6 @@ function getSupabaseClient() {
   return createClient(url, key);
 }
 
-const TODAY = new Date().toISOString().split('T')[0];
-
 // ── TodoInput ──────────────────────────────────────────────────────────────
 function TodoInput({ onAdd }: { onAdd: (title: string, priority: Priority) => void }) {
   const [text, setText] = useState('');
@@ -30,7 +28,7 @@ function TodoInput({ onAdd }: { onAdd: (title: string, priority: Priority) => vo
 
   const priorities: Record<Priority, { label: string; color: string }> = {
     low: { label: 'Low', color: 'bg-green-100 text-green-700 border-green-300' },
-    medium: { label: 'Medium', color: 'bg-yellow-100 text-yellow-700 border-yellow-300' },
+    medium: { label: 'Medium', color: 'bg-yellow-200 text-yellow-800 border-yellow-400' },
     high: { label: 'High', color: 'bg-red-100 text-red-700 border-red-300' },
   };
 
@@ -41,7 +39,7 @@ function TodoInput({ onAdd }: { onAdd: (title: string, priority: Priority) => vo
         const trimmed = text.trim();
         if (trimmed) { onAdd(trimmed, priority); setText(''); }
       }}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4"
+      className="bg-white rounded-2xl shadow-sm border border-yellow-200 p-4 mb-4"
     >
       <div className="flex gap-2 mb-3">
         <input
@@ -49,12 +47,12 @@ function TodoInput({ onAdd }: { onAdd: (title: string, priority: Priority) => vo
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Add a new task..."
-          className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition"
+          className="flex-1 bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 placeholder-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition"
         />
         <button
           type="submit"
           disabled={!text.trim()}
-          className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors duration-200 flex items-center gap-1.5 whitespace-nowrap"
+          className="bg-yellow-400 hover:bg-yellow-500 disabled:bg-yellow-200 disabled:text-yellow-400 text-yellow-900 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors duration-200 flex items-center gap-1.5 whitespace-nowrap shadow-sm"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -63,7 +61,7 @@ function TodoInput({ onAdd }: { onAdd: (title: string, priority: Priority) => vo
         </button>
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-400 font-medium">Priority:</span>
+        <span className="text-xs text-yellow-600 font-medium">Priority:</span>
         {(['low', 'medium', 'high'] as Priority[]).map((p) => (
           <button
             key={p}
@@ -72,7 +70,7 @@ function TodoInput({ onAdd }: { onAdd: (title: string, priority: Priority) => vo
             className={`text-xs px-3 py-1 rounded-full border font-medium transition-all duration-150 ${
               priority === p
                 ? priorities[p].color + ' ring-2 ring-offset-1 ring-current'
-                : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100'
+                : 'bg-yellow-50 text-yellow-500 border-yellow-200 hover:bg-yellow-100'
             }`}
           >
             {priorities[p].label}
@@ -108,14 +106,14 @@ function TodoItem({
   return (
     <div
       className={`bg-white rounded-2xl shadow-sm border transition-all duration-200 ${
-        todo.completed ? 'border-gray-100 opacity-60' : 'border-gray-100 hover:border-indigo-200 hover:shadow-md'
+        todo.completed ? 'border-yellow-100 opacity-60' : 'border-yellow-100 hover:border-yellow-300 hover:shadow-md'
       }`}
     >
       <div className="flex items-start gap-3 p-4">
         <button
           onClick={() => onToggle(todo.id)}
           className={`flex-shrink-0 w-5 h-5 mt-0.5 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-            todo.completed ? 'bg-indigo-500 border-indigo-500' : 'border-gray-300 hover:border-indigo-400'
+            todo.completed ? 'bg-yellow-400 border-yellow-400' : 'border-yellow-300 hover:border-yellow-500'
           }`}
         >
           {todo.completed && (
@@ -140,10 +138,10 @@ function TodoItem({
                 onChange={(e) => setEditText(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Escape') { setEditText(todo.title); setEditing(false); } }}
                 autoFocus
-                className="w-full bg-indigo-50 border border-indigo-200 rounded-lg px-3 py-1.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                className="w-full bg-yellow-50 border border-yellow-300 rounded-lg px-3 py-1.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
               <div className="flex gap-2 mt-2">
-                <button type="submit" className="text-xs bg-indigo-600 text-white px-3 py-1 rounded-lg hover:bg-indigo-700 transition-colors">Save</button>
+                <button type="submit" className="text-xs bg-yellow-400 text-yellow-900 px-3 py-1 rounded-lg hover:bg-yellow-500 transition-colors font-semibold">Save</button>
                 <button type="button" onClick={() => { setEditText(todo.title); setEditing(false); }} className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-lg hover:bg-gray-200 transition-colors">Cancel</button>
               </div>
             </form>
@@ -167,7 +165,7 @@ function TodoItem({
 
         {!editing && (
           <div className="flex items-center gap-1 flex-shrink-0">
-            <button onClick={() => setEditing(true)} className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-150" title="Edit task">
+            <button onClick={() => setEditing(true)} className="p-1.5 rounded-lg text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 transition-all duration-150" title="Edit task">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
@@ -201,10 +199,10 @@ function DateHeader() {
   const dayName = now.toLocaleDateString('en-US', { weekday: 'long' });
   const fullDate = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4 flex items-center gap-3">
-      <div className="w-12 h-12 bg-indigo-100 rounded-xl flex flex-col items-center justify-center">
-        <span className="text-xs font-semibold text-indigo-600 uppercase leading-none">{now.toLocaleDateString('en-US', { month: 'short' })}</span>
-        <span className="text-lg font-bold text-indigo-700 leading-none">{now.getDate()}</span>
+    <div className="bg-white rounded-2xl shadow-sm border border-yellow-200 p-4 mb-4 flex items-center gap-3">
+      <div className="w-12 h-12 bg-yellow-400 rounded-xl flex flex-col items-center justify-center shadow-sm">
+        <span className="text-xs font-semibold text-yellow-900 uppercase leading-none">{now.toLocaleDateString('en-US', { month: 'short' })}</span>
+        <span className="text-lg font-bold text-yellow-900 leading-none">{now.getDate()}</span>
       </div>
       <div>
         <p className="font-semibold text-gray-800">{dayName}</p>
@@ -218,14 +216,14 @@ function DateHeader() {
 function StatsBar({ completed, total }: { completed: number; total: number }) {
   const pct = total === 0 ? 0 : Math.round((completed / total) * 100);
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4">
+    <div className="bg-white rounded-2xl shadow-sm border border-yellow-200 p-4 mb-4">
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-gray-600">{completed} of {total} tasks done</span>
-        <span className="text-sm font-bold text-indigo-600">{pct}%</span>
+        <span className="text-sm font-bold text-yellow-600">{pct}%</span>
       </div>
-      <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+      <div className="w-full bg-yellow-100 rounded-full h-2.5 overflow-hidden">
         <div
-          className="h-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500"
+          className="h-2.5 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 transition-all duration-500"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -239,18 +237,18 @@ function StatsBar({ completed, total }: { completed: number; total: number }) {
 // ── FilterTabs ─────────────────────────────────────────────────────────────
 function FilterTabs({ filter, setFilter, counts }: { filter: Filter; setFilter: (f: Filter) => void; counts: Record<string, number> }) {
   return (
-    <div className="flex gap-1 bg-gray-100 rounded-xl p-1 mb-4">
+    <div className="flex gap-1 bg-yellow-100 rounded-xl p-1 mb-4">
       {([{ key: 'all', label: 'All' }, { key: 'active', label: 'Active' }, { key: 'completed', label: 'Completed' }] as { key: Filter; label: string }[]).map((tab) => (
         <button
           key={tab.key}
           onClick={() => setFilter(tab.key)}
           className={`flex-1 text-sm font-medium py-2 rounded-lg transition-all duration-200 ${
-            filter === tab.key ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+            filter === tab.key ? 'bg-white text-yellow-700 shadow-sm' : 'text-yellow-600 hover:text-yellow-800'
           }`}
         >
           {tab.label}
           <span className={`ml-1.5 text-xs px-1.5 py-0.5 rounded-full ${
-            filter === tab.key ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-200 text-gray-500'
+            filter === tab.key ? 'bg-yellow-100 text-yellow-700' : 'bg-yellow-200 text-yellow-600'
           }`}>
             {counts[tab.key]}
           </span>
@@ -270,7 +268,7 @@ export default function Home() {
 
   const loadTodos = useCallback(async () => {
     if (!supabase) {
-      setError('Supabase is not configured. Please set environment variables.');
+      setError('Supabase is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.');
       setLoading(false);
       return;
     }
@@ -278,12 +276,13 @@ export default function Home() {
     setError(null);
     const { data, error: err } = await supabase
       .from('todos')
-      .select('*')
-      .gte('created_at', `${TODAY}T00:00:00.000Z`)
-      .lte('created_at', `${TODAY}T23:59:59.999Z`)
+      .select('id, title, priority, completed, created_at')
       .order('created_at', { ascending: false });
-    if (err) setError('Failed to load tasks. Please try again.');
-    else setTodos(data ?? []);
+    if (err) {
+      setError(`Failed to load tasks: ${err.message}`);
+    } else {
+      setTodos(data ?? []);
+    }
     setLoading(false);
   }, [supabase]);
 
@@ -294,9 +293,9 @@ export default function Home() {
     const { data, error: err } = await supabase
       .from('todos')
       .insert([{ title, priority, completed: false }])
-      .select()
+      .select('id, title, priority, completed, created_at')
       .single();
-    if (err) setError('Failed to add task. Please try again.');
+    if (err) setError(`Failed to add task: ${err.message}`);
     else if (data) setTodos((prev) => [data, ...prev]);
   };
 
@@ -305,21 +304,21 @@ export default function Home() {
     const todo = todos.find((t) => t.id === id);
     if (!todo) return;
     const { error: err } = await supabase.from('todos').update({ completed: !todo.completed }).eq('id', id);
-    if (err) setError('Failed to update task. Please try again.');
+    if (err) setError(`Failed to update task: ${err.message}`);
     else setTodos((prev) => prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)));
   };
 
   const deleteTodo = async (id: string) => {
     if (!supabase) return;
     const { error: err } = await supabase.from('todos').delete().eq('id', id);
-    if (err) setError('Failed to delete task. Please try again.');
+    if (err) setError(`Failed to delete task: ${err.message}`);
     else setTodos((prev) => prev.filter((t) => t.id !== id));
   };
 
   const editTodo = async (id: string, title: string) => {
     if (!supabase) return;
     const { error: err } = await supabase.from('todos').update({ title }).eq('id', id);
-    if (err) setError('Failed to edit task. Please try again.');
+    if (err) setError(`Failed to edit task: ${err.message}`);
     else setTodos((prev) => prev.map((t) => (t.id === id ? { ...t, title } : t)));
   };
 
@@ -328,7 +327,7 @@ export default function Home() {
     const ids = todos.filter((t) => t.completed).map((t) => t.id);
     if (ids.length === 0) return;
     const { error: err } = await supabase.from('todos').delete().in('id', ids);
-    if (err) setError('Failed to clear completed tasks. Please try again.');
+    if (err) setError(`Failed to clear tasks: ${err.message}`);
     else setTodos((prev) => prev.filter((t) => !t.completed));
   };
 
@@ -342,13 +341,13 @@ export default function Home() {
     <main className="min-h-screen py-8 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl mb-4 shadow-lg">
-            <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-yellow-400 rounded-2xl mb-4 shadow-lg">
+            <svg className="w-7 h-7 text-yellow-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
             </svg>
           </div>
           <h1 className="text-3xl font-bold text-gray-800 mb-1">Daily Tasks</h1>
-          <p className="text-gray-500 text-sm">Stay organized, stay productive</p>
+          <p className="text-yellow-600 text-sm font-medium">Stay organized, stay productive</p>
         </div>
 
         <DateHeader />
@@ -374,8 +373,8 @@ export default function Home() {
 
         {loading ? (
           <div className="text-center py-16">
-            <div className="inline-block w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mb-3" />
-            <p className="text-gray-400 text-sm">Loading tasks...</p>
+            <div className="inline-block w-8 h-8 border-4 border-yellow-200 border-t-yellow-500 rounded-full animate-spin mb-3" />
+            <p className="text-yellow-500 text-sm font-medium">Loading tasks...</p>
           </div>
         ) : (
           <>
@@ -392,7 +391,7 @@ export default function Home() {
                 <div className="text-5xl mb-4">
                   {filter === 'completed' ? '🎉' : filter === 'active' ? '✅' : '📝'}
                 </div>
-                <p className="text-gray-400 font-medium">
+                <p className="text-yellow-500 font-medium">
                   {filter === 'completed' ? 'No completed tasks yet' : filter === 'active' ? 'All tasks completed!' : 'Add your first task for today'}
                 </p>
               </div>

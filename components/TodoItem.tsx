@@ -1,13 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import { Todo } from '@/app/page';
+
+type Priority = 'low' | 'medium' | 'high';
+
+interface Todo {
+  id: string;
+  title: string;
+  priority: Priority;
+  completed: boolean;
+  created_at: string;
+}
 
 interface TodoItemProps {
   todo: Todo;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
-  onEdit: (id: string, text: string) => void;
+  onEdit: (id: string, title: string) => void;
 }
 
 const priorityConfig = {
@@ -30,7 +39,7 @@ const priorityConfig = {
 
 export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText] = useState(todo.text);
+  const [editText, setEditText] = useState(todo.title);
 
   const handleEditSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,12 +51,12 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
-      setEditText(todo.text);
+      setEditText(todo.title);
       setIsEditing(false);
     }
   };
 
-  const config = priorityConfig[todo.priority];
+  const config = priorityConfig[todo.priority] ?? priorityConfig['medium'];
 
   return (
     <div
@@ -94,7 +103,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
                 <button
                   type="button"
                   onClick={() => {
-                    setEditText(todo.text);
+                    setEditText(todo.title);
                     setIsEditing(false);
                   }}
                   className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-lg hover:bg-gray-200 transition-colors"
@@ -110,7 +119,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
                   todo.completed ? 'line-through text-gray-400' : 'text-gray-800'
                 }`}
               >
-                {todo.text}
+                {todo.title}
               </p>
               <div className="flex items-center gap-2 mt-1.5">
                 <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium ${config.badge}`}>
@@ -118,7 +127,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
                   {config.label}
                 </span>
                 <span className="text-xs text-gray-400">
-                  {new Date(todo.createdAt).toLocaleTimeString('en-US', {
+                  {new Date(todo.created_at).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit',
                   })}

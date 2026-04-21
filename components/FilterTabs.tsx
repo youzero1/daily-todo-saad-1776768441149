@@ -1,6 +1,6 @@
 'use client';
 
-import { FilterType } from '@/app/page';
+type FilterType = 'all' | 'active' | 'completed';
 
 interface FilterTabsProps {
   filter: FilterType;
